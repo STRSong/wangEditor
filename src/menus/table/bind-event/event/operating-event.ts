@@ -116,24 +116,29 @@ function DeleteCol($node: DomElement, _index: number): DomElement {
  * 处理设置/取消表头
  * @param $node
  * @param _index
- * @type 替换的列 th 还是td
+ * @type 替换的标签 th还是td
  */
 function setTheHeader($node: DomElement, _index: number, type: string): DomElement {
-    //执行获取tbody节点
+    // 执行获取tbody节点
     let $dom = generateDomAction($node)
-    //取出所有的行
+    // 取出所有的行
     let domArray: HTMLElement[] = Array.prototype.slice.apply($dom.children)
-    //列的数量
-    const childrenLength = domArray[_index].children
-    //创建新tr
+    // 列的数量
+    const cols = domArray[_index].children
+    // 创建新tr
     let tr = document.createElement('tr')
-    for (let i = 0; i < childrenLength.length; i++) {
-        //替换td为th
-        const th = document.createElement(type)
-        Array.from(childrenLength[i].children).forEach(item => {
-            th.appendChild(item)
-        })
-        tr.appendChild(th)
+    for (let i = 0; i < cols.length; i++) {
+        // 根据type(td 或者 th)生成对应的el
+        const el = document.createElement(type)
+        if (cols[i].children.length) {
+            Array.from(cols[i].children).forEach(item => {
+                el.appendChild(item)
+            })
+        } else if (cols[i].innerHTML) {
+            // 没有children的时候，判断有没有innerHTML，有的话赋值，保留原先第一行的内容
+            el.innerHTML = cols[i].innerHTML
+        }
+        tr.appendChild(el)
     }
     //插入集合中
     domArray.splice(_index, 1, tr)
