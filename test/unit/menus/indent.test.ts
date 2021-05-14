@@ -31,7 +31,7 @@ test('indent 菜单：增加缩进', () => {
 
     editor.selection.createRangeByElem($h, true, true)
     indentMenu.command('increase')
-    expect($h.elems[0].style['paddingLeft']).toBe('')
+    expect($h.elems[0].style['paddingLeft']).toBe('2em')
 
     editor.selection.createRangeByElem($p, true, true)
     indentMenu.command('increase')
