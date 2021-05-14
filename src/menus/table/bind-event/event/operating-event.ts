@@ -130,14 +130,14 @@ function setTheHeader($node: DomElement, _index: number, type: string): DomEleme
     for (let i = 0; i < cols.length; i++) {
         // 根据type(td 或者 th)生成对应的el
         const el = document.createElement(type)
-        if (cols[i].children.length) {
-            Array.from(cols[i].children).forEach(item => {
-                el.appendChild(item)
-            })
-        } else if (cols[i].innerHTML) {
-            // 没有children的时候，判断有没有innerHTML，有的话赋值，保留原先第一行的内容
-            el.innerHTML = cols[i].innerHTML
-        }
+        const col = cols[i]
+        /**
+         * 没有使用children是因为谷歌纯文本内容children数组就为空，而火狐纯文本内容是“xxx<br>”使用children只能获取br
+         * 当然使用childNodes也涵盖支持我们表头使用表情，代码块等，不管是设置还是取消都会保留第一行
+         */
+        Array.from(col.childNodes).forEach(item => {
+            el.appendChild(item)
+        })
         tr.appendChild(el)
     }
     //插入集合中
